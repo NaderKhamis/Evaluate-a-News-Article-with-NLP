@@ -1,20 +1,18 @@
-// js files
-import { checkForURL } from './js/urlChecker'
-import { handleSubmit } from './js/formHandler'
+import { handleSubmit } from "./js/formHandler";
+import { checkForName } from "./js/nameChecker";
+import { checkPolarity } from "./js/polarityChecker";
+import { checkForURL } from "./js/urlChecker";
 
-// console.log(checkForURL);
+console.log(checkForName);
 
-// alert("I EXIST")
-// console.log("CHANGE!!");
+import "./styles/resets.scss";
+import "./styles/base.scss";
+import "./styles/footer.scss";
+import "./styles/form.scss";
+import "./styles/header.scss";
 
-// sass files
-import './styles/resets.scss'
-import './styles/base.scss'
-import './styles/footer.scss'
-import './styles/form.scss'
-import './styles/header.scss'
+const btn = document.querySelector("#submit");
 
-export {
-    checkForURL,
-    handleSubmit
-   }
+btn.addEventListener("click", (event) => handleSubmit(event));
+
+export { checkForURL, handleSubmit, checkPolarity };

@@ -1,37 +1,28 @@
-const path = require('path')
-const webpack = require('webpack')
-const HtmlWebPackPlugin = require("html-webpack-plugin")
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const WorkboxPlugin = require('workbox-webpack-plugin');
+const path = require("path");
+const webpack = require("webpack");
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
-    entry: './src/client/index.js',
+    entry: "./src/client/index.js",
+    mode: "development",
     output: {
-        libraryTarget: 'var',
-        library: 'Client'
+        libraryTarget: "var",
+        library: "Client",
     },
-    mode: 'development',
-    devtool: 'source-map',
-    stats: 'verbose',
+    devtool: "source-map",
+    stats: "verbose",
     module: {
-        rules: [
-            {
-                test: '/\.js$/',
+        rules: [{
+                test: "/.js$/",
                 exclude: /node_modules/,
-                loader: "babel-loader"
+                loader: "babel-loader",
             },
             {
-                test: /\.scss$/,
-                use: [ 'style-loader', 'css-loader', 'sass-loader' ]
+                test: /\.s[ac]ss$/i,
+                use: ["style-loader", "css-loader", "sass-loader"],
             },
-            {
-                test: /\.(png|jpe?g|gif)$/i,
-                loader: 'file-loader',
-                options: {
-                  name: '[path][name].[ext]',
-                }
-            }
-        ]
+        ],
     },
     plugins: [
         new HtmlWebPackPlugin({
@@ -45,8 +36,7 @@ module.exports = {
             verbose: true,
             // Automatically remove all unused webpack assets on rebuild
             cleanStaleWebpackAssets: true,
-            protectWebpackAssets: false
+            protectWebpackAssets: false,
         }),
-        new WorkboxPlugin.GenerateSW()
-    ]
-}
+    ],
+};

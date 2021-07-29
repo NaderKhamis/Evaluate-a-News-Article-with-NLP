@@ -1,59 +1,59 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <title>Sentiment Analyzer</title>
-        <link href="https://fonts.googleapis.com/css2?&family=Roboto:wght@300;500;700&family=Roboto+Slab:wght@300;400;700;800&display=swap" rel="stylesheet">
-        <script src="https://kit.fontawesome.com/1aac26dbd0.js" crossorigin="anonymous"></script>
-    </head>
+<html lang="en">
 
-    <body>
+<head>
+    <meta charset="utf-8">
+    <title>Evaluate a news article with nlp</title>
+</head>
 
-        <header>
-            <h1>
-               Sentient Analyzer
-            </h1>
-        </header>
+<body>
+    <header>
+        <div class="logo">
+            <p>NLP</p>
+            <!-- svg from fontawesome.com -->
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="newspaper" class="svg-inline--fa fa-newspaper fa-w-18" role="img" viewBox="0 0 576 512"><path fill="currentColor" d="M552 64H88c-13.255 0-24 10.745-24 24v8H24c-13.255 0-24 10.745-24 24v272c0 30.928 25.072 56 56 56h472c26.51 0 48-21.49 48-48V88c0-13.255-10.745-24-24-24zM56 400a8 8 0 0 1-8-8V144h16v248a8 8 0 0 1-8 8zm236-16H140c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h152c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12zm208 0H348c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h152c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12zm-208-96H140c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h152c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12zm208 0H348c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h152c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12zm0-96H140c-6.627 0-12-5.373-12-12v-40c0-6.627 5.373-12 12-12h360c6.627 0 12 5.373 12 12v40c0 6.627-5.373 12-12 12z"/>
+                <path xmlns="http://www.w3.org/2000/svg" fill="currentColor" d="M552 64H88c-13.255 0-24 10.745-24 24v8H24c-13.255 0-24 10.745-24 24v272c0 30.928 25.072 56 56 56h472c26.51 0 48-21.49 48-48V88c0-13.255-10.745-24-24-24zM56 400a8 8 0 0 1-8-8V144h16v248a8 8 0 0 1-8 8zm236-16H140c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h152c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12zm208 0H348c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h152c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12zm-208-96H140c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h152c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12zm208 0H348c-6.627 0-12-5.373-12-12v-8c0-6.627 5.373-12 12-12h152c6.627 0 12 5.373 12 12v8c0 6.627-5.373 12-12 12zm0-96H140c-6.627 0-12-5.373-12-12v-40c0-6.627 5.373-12 12-12h360c6.627 0 12 5.373 12 12v40c0 6.627-5.373 12-12 12z"/>
+            </svg>
+        </div>
+    </header>
+    <main>
+        <section>
+            <form>
+                <div class="label">
+                    <label>
+                            <input type="radio" id="url" name="input" value="url" checked>
+                            URL
+                        </label>
+                    <label>
+                            <input type="radio" id="text" name="input" value="text">
+                            Text
+                        </label>
+                </div>
+                <input id="name" type="text" name="input" value="" placeholder="Enter the news page URL">
+                <input id="submit" type="submit" name="" value="submit">
+            </form>
+        </section>
+        <section>
+            <p><span class="keys">Status: </span><span id="loading"></span></p> <br/>
+            <div>
+                <p><span class="keys">Polarity: </span><span id="polarity"></span></p>
+            </div><br/>
+            <div>
+                <p><span class="keys">Confidence: </span><span id="confidence"></span></p>
+            </div>
+        </section>
+    </main>
+    <footer>
+    </footer>
+    <script>
+        // Check that service workers are supported
+        if ('serviceWorker' in navigator) {
+            // Use the window load event to keep the page load performant
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js');
+            });
+        }
+    </script>
+</body>
 
-        <main>
-            <p>Enter a URL of an article / a blog to discover its sentiment.</p>
-            <section>
-                <form class="" onsubmit="return Client.handleSubmit(event)">
-                    <input id="url" type="text" name="input" value="" placeholder="Enter URL here">
-                    <input type="submit" name="" value="submit" onclick="return Client.handleSubmit(event)" onsubmit="return handleSubmit(event)">
-                </form>
-            </section>
-
-            <section>
-                <strong>Form Results:</strong>
-                <div id="polarity"></div>
-                <div id="agreement"></div>
-                <div id="subjectivity"></div>
-                <div id="confidence"></div>
-                <div id="irony"></div>
-            </section>
-        </main>
-
-        <footer>
-            <nav class="fnav">
-                <ul>
-                    <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
-                    <li><a href="https://github.com/emiribegic" target="_blank"><i class="fab fa-github-square"></i></a></li>
-                    <li><a href="#"><i class="fab fa-instagram-square"></i></a></li>
-                    <li><a href="#"><i class="fab fa-facebook-square"></i></a></li>
-                </ul>
-                <div class="copyright">© 2020</div>
-            </nav>
-        </footer>
-
-        <script>
-            // Check that service workers are supported
-            if ('serviceWorker' in navigator) {
-                // Use the window load event to keep the page load performant
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/service-worker.js');
-                });
-            }
-        </script>
-    </body>
 </html>

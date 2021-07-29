@@ -1,7 +1,9 @@
-let json = {
-    'title': 'test json response',
-    'message': 'this is a message',
-    'time': 'now'
-}
+const dotenv = require("dotenv");
+dotenv.config();
 
-module.exports = json
+let json = {
+    key: process.env.API_KEY,
+    lang: "auto",
+};
+
+module.exports = json;

@@ -1,11 +1,10 @@
-function checkForURL(inputURL) {
-    var regex = inputURL.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+function checkForURL(inputText) {
+    console.log("::: Running checkForURL :::", inputText);
 
-     if(regex == null){
-         return 0;
-     } else{
-     return 1;
-     }
- }
+    let regex = /^(www\.|http(s)?:\/\/)[a-z A-Z 0-9]*\..*$/i;
+    let result = regex.test(inputText);
 
- export { checkForURL }
+    return result;
+}
+
+export { checkForURL };

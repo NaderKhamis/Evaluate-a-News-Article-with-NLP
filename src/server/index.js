@@ -1,64 +1,64 @@
-const dotenv = require('dotenv');
+var path = require("path");
+const express = require("express");
+const mockAPIResponse = require("./mockAPI.js");
+const request = require("request");
+
+const app = express();
+
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// Cors for cross origin allowance
+const cors = require("cors");
+app.use(cors());
+
+const dotenv = require("dotenv");
 dotenv.config();
 
-var path = require('path')
-const express = require('express')
-const bodyParser = require('body-parser')
-const fetch = require('node-fetch');
-const mockAPIResponse = require('./mockAPI.js')
+app.use(express.static("dist"));
 
-// Start up an instance of app
-const app = express()
+console.log(__dirname);
 
-// Cors allows the browser and server to communicate without any security interruptions
-const cors = require('cors');
-
-app.use(cors());
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: false}))
-app.use(bodyParser.json());
-app.use(express.static('dist'))
-
-console.log(__dirname)
-
-// API
-const baseURL = 'https://api.meaningcloud.com/sentiment-2.1?'
-const apiKey = process.env.API_KEY
-console.log(`Your API Key is ${process.env.API_KEY}`);
-let userInput = [] // const does not work
-
-app.get('/', function (req, res) {
-    res.sendFile('dist/index.html')
-    //res.sendFile(path.resolve('src/client/views/index.html'))
-})
-
-app.get('/test', function (req, res) {
-    res.send(mockAPIResponse)
-})
-
-// POST Route
-app.post('/api', async function(req, res) {
-    userInput = req.body.url;
-    console.log(`You entered: ${userInput}`);
-    const apiURL = `${baseURL}key=${apiKey}&url=${userInput}&lang=en`
-
-    const response = await fetch(apiURL)
-    const mcData = await response.json()
-    console.log(mcData)
-    res.send(mcData)
-    /** server sends only specified data to the client with below codes
-     * const projectData = {
-     *  score_tag : mcData.score_tag,
-     *  agreement : mcData.agreement,
-     *  subjectivity : mcData.subjectivity,
-     *  confidence : mcData.confidence,
-     *  irony : mcData.irony
-     * }
-     * res.send(projectData);
-     * */
-})
+app.get("/", function(req, res) {
+    // res.sendFile('dist/index.html')
+    res.sendFile("dist/index.html");
+});
 
 // designates what port the app will listen to for incoming requests
-app.listen(8081, function () {
-    console.log('Example app listening on port 8081!')
-})
+let port = process.env.PORT || 8080;
+app.listen(port, function() {
+    console.log(`App is listening on port ${port}!`);
+});
+
+app.post("/analyze", function(req, res) {
+    const { formText, inputType } = req.body;
+    let body = {};
+
+    inputType === "url" ?
+        (body = JSON.stringify({
+            key: process.env.API_KEY,
+            url: formText,
+            lang: "auto",
+        })) :
+        (body = JSON.stringify({
+            key: process.env.API_KEY,
+            txt: formText,
+            lang: "auto",
+        }));
+
+    const requestOptions = {
+        method: "POST",
+        body,
+        redirect: "follow",
+        uri: "https://api.meaningcloud.com/sentiment-2.1",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    };
+    request(requestOptions, function(error, res, body) {
+        console.log("err: ", error);
+        console.log(body);
+        res.send(body);
+    });
+});
